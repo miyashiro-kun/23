@@ -53,24 +53,4 @@ jobs:
           CLANG_TRIPLE=aarch64-linux-gnu- \
           CROSS_COMPILE=$CROSS_COMPILE
 
-    - name: Prepare flashable zip
-      run: |
-        # Copy kernel image into AnyKernel3 directory, renaming if needed by your anykernel.sh
-        cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3/Image.gz-dtb
 
-    - name: Create flashable zip
-      run: |
-        cd AnyKernel3
-        zip -r9 ../Ginkgo-Kernel.zip ./*
-
-    - name: Upload Kernel Image
-      uses: actions/upload-artifact@v4
-      with:
-        name: Image.gz-dtb
-        path: out/arch/arm64/boot/Image.gz-dtb
-
-    - name: Upload flashable kernel zip
-      uses: actions/upload-artifact@v4
-      with:
-        name: Ginkgo-Kernel.zip
-        path: Ginkgo-Kernel.zip
