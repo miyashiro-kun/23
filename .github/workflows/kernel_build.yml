@@ -48,7 +48,7 @@ jobs:
         export CLANG_TRIPLE=aarch64-linux-gnu-
         export PATH=$PWD/clang/bin:$PATH
 
-        make O=out cuttlefish_defconfig
+        make O=out ginkgo-stock_defconfig
         yes "" | make O=out olddefconfig
 
         make -j$(nproc) O=out \
