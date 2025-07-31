@@ -23,8 +23,9 @@ jobs:
     - name: Download Clang 15
       run: |
         mkdir clang
-        curl -L https://github.com/kdrag0n/proton-clang/releases/download/15.0.7/clang-15.0.7.tar.xz -o clang.tar.xz
+        curl -L https://github.com/kdrag0n/proton-clang/releases/download/15.0.7/proton-clang-15.0.7.tar.xz -o clang.tar.xz
         tar -xf clang.tar.xz -C clang --strip-components=1
+
 
 
     - name: Download GCC Toolchains
