@@ -30,24 +30,42 @@ jobs:
       run: |
         git clone --depth=1 https://github.com/KudProject/aarch64-linux-android-4.9 gcc64
 
+    - name: Download AnyKernel3
+      run: |
+        git clone --depth=1 https://github.com/osm0sis/AnyKernel3.git
+
     - name: Build Kernel
       run: |
         export ARCH=arm64
         export SUBARCH=arm64
         export CLANG_PATH=$PWD/clang
         export CROSS_COMPILE=$PWD/gcc64/bin/aarch64-linux-android-
-        export CROSS_COMPILE_ARM32=$PWD/gcc32/bin/arm-linux-androideabi-
         export PATH=$CLANG_PATH/bin:$PATH
 
-        make O=out ginkgo_defconfig
+        make O=out cuttlefish_defconfig
         make -j$(nproc) O=out \
           CC=clang \
           CLANG_TRIPLE=aarch64-linux-gnu- \
-          CROSS_COMPILE=$CROSS_COMPILE \
-          CROSS_COMPILE_ARM32=$CROSS_COMPILE_ARM32
+          CROSS_COMPILE=$CROSS_COMPILE
+
+    - name: Prepare flashable zip
+      run: |
+        # Copy kernel image into AnyKernel3 directory, renaming if needed by your anykernel.sh
+        cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3/Image.gz-dtb
+
+    - name: Create flashable zip
+      run: |
+        cd AnyKernel3
+        zip -r9 ../Ginkgo-Kernel.zip ./*
 
     - name: Upload Kernel Image
       uses: actions/upload-artifact@v4
       with:
         name: Image.gz-dtb
         path: out/arch/arm64/boot/Image.gz-dtb
+
+    - name: Upload flashable kernel zip
+      uses: actions/upload-artifact@v4
+      with:
+        name: Ginkgo-Kernel.zip
+        path: Ginkgo-Kernel.zip
