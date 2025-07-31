@@ -1,7 +1,7 @@
 name: Kernel Build CI (Ginkgo - Clang 15)
 
 on:
-  workflow_dispatch:  # ✅ Allows manual trigger from the GitHub UI
+  workflow_dispatch:  # Manual trigger
 
 jobs:
   build:
@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - name: Checkout Kernel Source
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4  # Updated to v4
 
     - name: Set up Environment
       run: |
@@ -45,7 +45,7 @@ jobs:
           CROSS_COMPILE_ARM32=$CROSS_COMPILE_ARM32
 
     - name: Upload Kernel Image
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4  # ✅ Updated version
       with:
         name: Image.gz-dtb
         path: out/arch/arm64/boot/Image.gz-dtb
