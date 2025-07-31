@@ -23,7 +23,7 @@ jobs:
     - name: Download Clang 15
   run: |
     mkdir clang
-    curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/clang+llvm-20.1.8-x86_64-linux-gnu-ubuntu-20.04.tar.xz -o clang.tar.xz
+        curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/clang+llvm-20.1.8-x86_64-linux-gnu-ubuntu-20.04.tar.xz -o clang.tar.xz
         tar -xf clang.tar.xz -C clang --strip-components=1
 
     - name: Download GCC Toolchains
