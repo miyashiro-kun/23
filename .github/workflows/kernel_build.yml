@@ -28,8 +28,7 @@ jobs:
 
     - name: Download GCC toolchains
       run: |
-        git clone --depth=1 https://github.com/TheMuppets/aarch64-linux-android-4.9 gcc64
-        git clone --depth=1 https://github.com/TheMuppets/arm-linux-androideabi-4.9 gcc32
+        git clone --depth=1 https://github.com/KudProject/aarch64-linux-android-4.9 gcc64
 
     - name: Build Kernel
       run: |
