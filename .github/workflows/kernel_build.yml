@@ -1,8 +1,7 @@
-
 name: Kernel Build CI (Ginkgo - Clang 15)
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # ✅ Allows manual trigger from the GitHub UI
 
 jobs:
   build:
