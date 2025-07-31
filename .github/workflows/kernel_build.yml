@@ -21,12 +21,10 @@ jobs:
         sudo apt install -y bc bison build-essential ccache curl flex git libncurses-dev libssl-dev python3 python-is-python3 rsync unzip zip zlib1g-dev
 
     - name: Download Clang 15
-      run: |
-        mkdir clang
-        curl -L https://github.com/kdrag0n/proton-clang/releases/download/15.0.7/proton-clang-15.0.7.tar.xz -o clang.tar.xz
+  run: |
+    mkdir clang
+    curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/clang+llvm-20.1.8-x86_64-linux-gnu-ubuntu-20.04.tar.xz -o clang.tar.xz
         tar -xf clang.tar.xz -C clang --strip-components=1
-
-
 
     - name: Download GCC Toolchains
       run: |
