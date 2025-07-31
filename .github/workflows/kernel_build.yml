@@ -1,4 +1,4 @@
-name: Kernel Build CI (Ginkgo - Clang 15)
+name: Kernel Build CI (Ginkgo - Clang 15 + GCC 9.4)
 
 on:
   workflow_dispatch:
@@ -18,27 +18,28 @@ jobs:
     - name: Set up Environment
       run: |
         sudo apt update
-        sudo apt install -y bc bison build-essential ccache curl flex git libncurses-dev libssl-dev python3 python-is-python3 rsync unzip zip zlib1g-dev
+        sudo apt install -y \
+          bc bison build-essential ccache curl flex git libncurses-dev \
+          libssl-dev python3 python-is-python3 rsync unzip zip zlib1g-dev \
+          gcc-9-aarch64-linux-gnu g++-9-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
-    - name: Download latest LLVM prebuilt
+    - name: Set GCC 9.4 as default aarch64 toolchain
+      run: |
+        sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-9 100
+
+    - name: Download Clang 15
       run: |
         mkdir clang
-        curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-Linux-X64.tar.xz -o clang.tar.xz
+        curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/clang+llvm-15.0.7-x86_64-linux-gnu-ubuntu-20.04.tar.xz -o clang.tar.xz
         tar -xf clang.tar.xz -C clang --strip-components=1
 
-    - name: Install GCC 9.4 cross-compiler
-      run: |
-        sudo apt update
-        sudo apt install -y gcc-9-aarch64-linux-gnu g++-9-aarch64-linux-gnu binutils-aarch64-linux-gnu
-
-    - name: Clean AnyKernel3 folder if exists
+    - name: Clean AnyKernel3 if exists
       run: rm -rf AnyKernel3
 
     - name: Download AnyKernel3
-      run: |
-        git clone --depth=1 https://github.com/osm0sis/AnyKernel3.git
+      run: git clone --depth=1 https://github.com/osm0sis/AnyKernel3.git
 
-    - name: Build Kernel (GCC 9.4 + Clang)
+    - name: Build Kernel (Clang 15 + GCC 9.4)
       run: |
         export ARCH=arm64
         export SUBARCH=arm64
@@ -47,7 +48,10 @@ jobs:
         export CLANG_TRIPLE=aarch64-linux-gnu-
         export PATH=$PWD/clang/bin:$PATH
 
-        make O=out cuttlefish_defconfig
+        # Ensure defconfig exists or replace with your own (e.g. ginkgo_defconfig)
+        make O=out defconfig
+
+        # Build kernel
         make -j$(nproc) O=out \
           CC=clang \
           CROSS_COMPILE=$CROSS_COMPILE
@@ -67,7 +71,7 @@ jobs:
         name: Image.gz-dtb
         path: out/arch/arm64/boot/Image.gz-dtb
 
-    - name: Upload flashable kernel zip
+    - name: Upload Flashable ZIP
       uses: actions/upload-artifact@v4
       with:
         name: Ginkgo-Kernel.zip
