@@ -40,7 +40,7 @@ jobs:
         git clone --depth=1 https://github.com/osm0sis/AnyKernel3.git
 
 
-    - name: Build Kernel
+    - name: Build Kernel (GCC 9.4 + Clang)
       run: |
         export ARCH=arm64
         export SUBARCH=arm64
@@ -52,7 +52,6 @@ jobs:
         make O=out cuttlefish_defconfig
         make -j$(nproc) O=out \
           CC=clang \
-          CLANG_TRIPLE=aarch64-linux-gnu- \
           CROSS_COMPILE=$CROSS_COMPILE
 
 - name: Prepare flashable zip
