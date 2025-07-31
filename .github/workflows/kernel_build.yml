@@ -39,7 +39,7 @@ jobs:
     - name: Download AnyKernel3
       run: git clone --depth=1 https://github.com/osm0sis/AnyKernel3.git
 
-    - name: Build Kernel (Clang 15 + GCC 9.4)
+   - name: Build Kernel (Clang 20 + GCC 9.4)
       run: |
         export ARCH=arm64
         export SUBARCH=arm64
@@ -48,13 +48,17 @@ jobs:
         export CLANG_TRIPLE=aarch64-linux-gnu-
         export PATH=$PWD/clang/bin:$PATH
 
-        # Ensure defconfig exists or replace with your own (e.g. ginkgo_defconfig)
-        make O=out defconfig
+        # Start with a base defconfig (change if needed)
+        make O=out cuttlefish_defconfig
 
-        # Build kernel
+        # Automatically fill in new Kconfig entries with default values
+        yes "" | make O=out olddefconfig
+
+        # Now build the kernel
         make -j$(nproc) O=out \
           CC=clang \
           CROSS_COMPILE=$CROSS_COMPILE
+
 
     - name: Prepare flashable zip
       run: |
