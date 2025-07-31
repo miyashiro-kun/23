@@ -27,9 +27,9 @@ jobs:
         tar -xf clang.tar.xz -C clang --strip-components=1
 
     - name: Install GCC 9.4 cross-compiler
-        run: |
-          sudo apt update
-          sudo apt install -y gcc-9-aarch64-linux-gnu g++-9-aarch64-linux-gnu binutils-aarch64-linux-gnu
+      run: |
+        sudo apt update
+        sudo apt install -y gcc-9-aarch64-linux-gnu g++-9-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
     - name: Clean AnyKernel3 folder if exists
         run: rm -rf AnyKernel3
