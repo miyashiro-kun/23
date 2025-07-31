@@ -30,9 +30,12 @@ jobs:
       run: |
         git clone --depth=1 https://github.com/KudProject/aarch64-linux-android-4.9 gcc64
 
+    - name: Clean AnyKernel3 folder if exists
+        run: rm -rf AnyKernel3
+
     - name: Download AnyKernel3
-      run: |
-        git clone --depth=1 https://github.com/osm0sis/AnyKernel3.git
+        run: git clone --depth=1 https://github.com/osm0sis/AnyKernel3.git
+
 
     - name: Build Kernel
       run: |
