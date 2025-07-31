@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write  # Required by artifact v4
+      contents: write
 
     steps:
     - name: Checkout Kernel Source
@@ -32,13 +32,11 @@ jobs:
         sudo apt install -y gcc-9-aarch64-linux-gnu g++-9-aarch64-linux-gnu binutils-aarch64-linux-gnu
 
     - name: Clean AnyKernel3 folder if exists
-      run: |
-        rm -rf AnyKernel3
+      run: rm -rf AnyKernel3
 
     - name: Download AnyKernel3
       run: |
         git clone --depth=1 https://github.com/osm0sis/AnyKernel3.git
-
 
     - name: Build Kernel (GCC 9.4 + Clang)
       run: |
@@ -54,9 +52,8 @@ jobs:
           CC=clang \
           CROSS_COMPILE=$CROSS_COMPILE
 
-- name: Prepare flashable zip
+    - name: Prepare flashable zip
       run: |
-        # Copy kernel image into AnyKernel3 directory, renaming if needed by your anykernel.sh
         cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3/Image.gz-dtb
 
     - name: Create flashable zip
